@@ -18,6 +18,10 @@ app.get('/login', (req: Request, res: Response) => {
   res.render('login', { message: 'Login Page' })
 })
 
+app.post('/login', (req: Request, res: Response) => {
+  // logica del login (nothing)
+  res.send('Intento de login pero esto no hace una mierda')
+})
 
 // endpoint cat
 app.get('/cat', (req: Request, res: Response) => {
