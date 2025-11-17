@@ -8,8 +8,15 @@ const port: number = 3000
 app.set('view engine', 'ejs')
 // definir carpeta
 app.set('views', './src/views')
+
+
 // configurar bbdd bettersqlite
 const db = new Database("database.db")
+
+// configruar poder leer info de formularios
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
+
 
 // endpoint raiz
 app.get('/', (req: Request, res: Response) => {
