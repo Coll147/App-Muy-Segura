@@ -10,12 +10,12 @@ app.set('views', './src/views')
 
 // endpoint raiz
 app.get('/', (req: Request, res: Response) => {
-  res.render('index', { message: 'Indeeeeex' })
+  res.render('index', { info: 'Indeeeeex' })
 })
 
 // endpoint raiz
 app.get('/login', (req: Request, res: Response) => {
-  res.render('login', { message: 'Login Page' })
+  res.render('login', { info: 'Login Page' })
 })
 
   app.post('/login', (req: Request, res: Response) => {
@@ -24,6 +24,14 @@ app.get('/login', (req: Request, res: Response) => {
   })
 
 // endpoint registro
+app.get('/register', (req: Request, res: Response) => {
+  res.render('register', { info: 'Register Page' })
+})
+
+  app.post('/register', (req: Request, res: Response) => {
+    // logica del register (nothing)
+    res.send('Intento de register. Pero sigue sin haber nada')
+  })
 
 // endpoint cat
 app.get('/cat', (req: Request, res: Response) => {
