@@ -1,4 +1,5 @@
 import express, { Application, Request, Response} from "express"
+import Database from "better-sqlite3"
 
 const app: Application = express()
 const port: number = 3000
@@ -7,6 +8,8 @@ const port: number = 3000
 app.set('view engine', 'ejs')
 // definir carpeta
 app.set('views', './src/views')
+// configurar bbdd bettersqlite
+const db = new Database("database.db")
 
 // endpoint raiz
 app.get('/', (req: Request, res: Response) => {
@@ -29,7 +32,8 @@ app.get('/register', (req: Request, res: Response) => {
 })
 
   app.post('/register', (req: Request, res: Response) => {
-    // logica del register (nothing)
+    const {username, password, passwordConfirm} = req.body;
+    console.log(username, password, passwordConfirm)
     res.send('Intento de register. Pero sigue sin haber nada')
   })
 
