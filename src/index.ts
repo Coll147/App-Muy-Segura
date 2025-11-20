@@ -24,7 +24,7 @@ app.get('/', (req: Request, res: Response) => {
   res.render('index', { info: 'Indeeeeex' })
 })
 
-// endpoint raiz
+// endpoint login
 app.get('/login', (req: Request, res: Response) => {
   res.render('login', { info: 'Login Page' })
 })
@@ -51,6 +51,8 @@ app.get('/login', (req: Request, res: Response) => {
       return res.send("Contraseña incorrecta")
     }
     console.log("Todo bonito todo hermoso ya loguiaste")
+    
+      // deberíamos añadir una cookie
     
     // si todo va bien a redirigir y tal
     res.send("Login exitoso. Bienvenido " + username)
@@ -92,9 +94,21 @@ app.get('/register', (req: Request, res: Response) => {
     res.redirect('/')
   })
 
-// endpoint cat
-app.get('/cat', (req: Request, res: Response) => {
-    res.send('<h1>Gato.</h1> <img style="height: 500px" src="https://preview.redd.it/get-server-rack-to-stop-cat-messing-with-my-computers-cat-v0-9sjf2dtnbvxd1.jpeg?width=1080&crop=smart&auto=webp&s=730a503c84234fa69ea82fd144a9b90231726ee9">')
+// endpoint protegido para users logueados
+app.get('/protected', (req: Request, res: Response) => {
+    res.send('solo los usuarios logeados pueden ver esto')
+})
+
+// endpoint libros
+app.get('/libros', (req: Request, res: Response) => {
+  // habria que sacarlo de una base de datos
+  const libros = [
+    { name: 'Mi libro', autor: 'Yo mismo' },
+    { name: 'Otro libro', autor: 'Otro autor' },
+    { name: 'Libro interesante', autor: 'Autor famoso' },
+    { name: 'Libro de aventuras', autor: 'Aventurero' }
+  ]
+  res.render('libros', { libros })
 })
 
 // Funcion para inicializar la base de datos
