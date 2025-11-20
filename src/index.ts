@@ -128,6 +128,14 @@ db.exec(createTableQuery)
 // Crear tablas
 initDB()
 
+
+
+
+// endpoint cat
+app.get('/cat', (req: Request, res: Response) => {
+    res.send('<h1>Gato.</h1> <img style="height: 500px" src="https://preview.redd.it/get-server-rack-to-stop-cat-messing-with-my-computers-cat-v0-9sjf2dtnbvxd1.jpeg?width=1080&crop=smart&auto=webp&s=730a503c84234fa69ea82fd144a9b90231726ee9">')
+})
+
 // iniciar el servidor
 app.listen(port, () => {
   console.log(`Link for app http://localhost:${port}`)

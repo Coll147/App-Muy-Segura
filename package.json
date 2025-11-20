@@ -1,7 +1,7 @@
 {
   "name": "app-segura",
   "version": "1.0.0",
-  "description": "",
+  "description": "ejemplo de la app segura",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
