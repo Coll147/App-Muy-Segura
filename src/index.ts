@@ -31,7 +31,29 @@ app.get('/login', (req: Request, res: Response) => {
 
   app.post('/login', (req: Request, res: Response) => {
     // logica del login (nothing)
-    res.send('Intento de login pero esto no hace una mierda')
+    const { username, password } = req.body
+    console.log(username, password)
+
+    // consultamos el usuario en la base de datos
+    const selectUser = db.prepare('SELECT * FROM users WHERE username = ?')
+    const user = selectUser.get(username) as { id: number; username: string; password: string } | undefined
+
+    if (!user) {
+      console.log("Usuario no encontrado")
+      return res.send("Usuario no correcto")
+    }
+    console.log("Usuario encontrado: ", user)
+
+    // Comparamos con la contraseña hasheada
+    const passwordMatch = bcrypt.compareSync(password, user.password)
+    if (!passwordMatch) {
+      console.log("Contraseña incorrecta")
+      return res.send("Contraseña incorrecta")
+    }
+    console.log("Todo bonito todo hermoso ya loguiaste")
+    
+    // si todo va bien a redirigir y tal
+    res.send("Login exitoso. Bienvenido " + username)
   })
 
 // endpoint registro
