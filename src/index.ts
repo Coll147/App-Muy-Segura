@@ -1,5 +1,6 @@
 import express, { Application, Request, Response} from "express"
 import Database from "better-sqlite3"
+import bcrypt from "bcrypt"
 
 const app: Application = express()
 const port: number = 3000
@@ -39,15 +40,57 @@ app.get('/register', (req: Request, res: Response) => {
 })
 
   app.post('/register', (req: Request, res: Response) => {
-    const {username, password, passwordConfirm} = req.body;
+    const {username, password, passwordConfirm} = req.body
     console.log(username, password, passwordConfirm)
-    res.send('Intento de register. Pero sigue sin haber nada')
+    
+    // Validar si la contraseña coincie
+    if (password !== passwordConfirm) {
+      return res.send('Las contraseñas no coinciden')
+    }
+
+    // Si el usuario no estar indexarle en la db
+    const selectUser = db.prepare('SELECT * FROM users WHERE username = ?')
+    const user = selectUser.get(username)
+    if (user) {
+      console.log("El user ya existe :V")
+      return res.send('El usuario ya existe')
+    }
+    console.log("El user no existe, momento de meterlo en la DB")
+    
+    // Hashear la contraseña y tal (POR FIN ALGO DE SEGURO EN LA APPPP SEGURA)
+    const saltRounds = 10
+    const hashedPassword = bcrypt.hashSync(password, saltRounds)
+
+    // Insertar usuario
+    const insertUser = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)')
+    insertUser.run(username, hashedPassword)
+    console.log("Completado, redirigiendo")
+
+    // Redirigir
+    res.redirect('/')
   })
 
 // endpoint cat
 app.get('/cat', (req: Request, res: Response) => {
     res.send('<h1>Gato.</h1> <img style="height: 500px" src="https://preview.redd.it/get-server-rack-to-stop-cat-messing-with-my-computers-cat-v0-9sjf2dtnbvxd1.jpeg?width=1080&crop=smart&auto=webp&s=730a503c84234fa69ea82fd144a9b90231726ee9">')
 })
+
+// Funcion para inicializar la base de datos
+function initDB() {
+  // Crea la tabla de usuarios si no existe
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL
+    )
+  `
+
+db.exec(createTableQuery)
+}
+
+// Crear tablas
+initDB()
 
 // iniciar el servidor
 app.listen(port, () => {
