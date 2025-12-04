@@ -1,9 +1,11 @@
 import express, { Application, Request, Response} from "express"
 import Database from "better-sqlite3"
 import bcrypt from "bcrypt"
+import fs from "fs"
+import https from "https"
 
 const app: Application = express()
-const port: number = 3000
+const port: number = 443
 
 // instalar motor de vistas 
 app.set('view engine', 'ejs')
@@ -18,6 +20,11 @@ const db = new Database("database.db")
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
+// certificado bullshit
+const options = {
+  key: fs.readFileSync('./certs/privkey.pem'),
+  cert: fs.readFileSync('./certs/cert.pem')
+}
 
 // endpoint raiz
 app.get('/', (req: Request, res: Response) => {
@@ -137,6 +144,12 @@ app.get('/cat', (req: Request, res: Response) => {
 })
 
 // iniciar el servidor
-app.listen(port, () => {
-  console.log(`Link for app http://localhost:${port}`)
+https.createServer(options, app).listen(port,  () => {
+  console.log(`Link for app https://localhost:${port}`)
 })
+
+/* HTTP SERVER
+app.listen(port, () => {
+  console.log(`Link for app https://localhost:${port}`)
+})
+*/
